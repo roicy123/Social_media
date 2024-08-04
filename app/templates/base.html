@@ -99,13 +99,13 @@
                   <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                 </ul>
               </div>
-            {% endif %}
             <form class="d-flex" role="search" action="{% url 'search_users' %}">
               <input class="form-control me-2" type="search" placeholder="Search Users" aria-label="Search" name="q" />
               <button class="btn btn-outline-light" type="submit">
                 <i class="bi bi-search"></i> <!-- Bootstrap icon for search -->
               </button>
-            </form>            
+            </form>
+            {% endif %}            
           </div>
         </div>
       </nav>
