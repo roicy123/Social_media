@@ -10,7 +10,7 @@ def redirect_to_feed(request):
 
 urlpatterns = [
     # Redirecting to Home Page to Feed Page
-    path('', redirect_to_feed),
+    path('', views.login_view, name='login'),
     # Signup Page
     path('signup/', views.signup, name='signup'),
     # Login
