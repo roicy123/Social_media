@@ -1,0 +1,135 @@
+{% load static %}
+{% load bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-picker-element@3.0.0/dist/emoji-picker-element.css">
+  <title>TextWave</title>
+  {% bootstrap_css %}
+  <style>
+    html, body {
+      height: 100%;
+    }
+    .navbar-brand img {
+      height: 40px;
+    }
+    .navbar {
+      padding: 10px 20px;
+      font-size: 1.1em;
+    }
+    .navbar-nav .nav-link {
+      color: #ffffff !important;
+    }
+    .navbar-nav .dropdown-menu {
+      background-color: #0056b3;
+    }
+    .navbar-nav .dropdown-menu .dropdown-item {
+      color: #ffffff !important;
+    }
+    .navbar-nav .dropdown-menu .dropdown-item:hover {
+      background-color: #004494;
+    }
+    .username-link {
+      color: #ffffff !important; /* Custom color for the username link */
+    }
+    .footer {
+      background-color: #f8f9fa;
+      padding: 20px 0;
+      text-align: center;
+      margin-top: auto;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .content {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  {% bootstrap_messages %}
+  <div class="wrapper">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'feed' %}">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" /> TextWave
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              {% if user.is_authenticated %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'feed' %}">Feed</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'post_create' %}">New Post</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'recommend' %}">Post Suggestions</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'top_headlines' %}">News</a>
+                </li>
+              {% else %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                </li>
+              {% endif %}
+            </ul>
+            {% if user.is_authenticated %}
+              <div class="dropdown">
+                <a class="nav-link dropdown-toggle username-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ user.username }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="{% url 'user_profile' user.username %}">Profile</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+              </div>
+            {% endif %}
+            <form class="d-flex" role="search" action="{% url 'search_users' %}">
+              <input class="form-control me-2" type="search" placeholder="Search Users" aria-label="Search" name="q" />
+              <button class="btn btn-outline-light" type="submit">
+                <i class="bi bi-search"></i> <!-- Bootstrap icon for search -->
+              </button>
+            </form>            
+          </div>
+        </div>
+      </nav>
+    </header>
+    <main class="container my-4 content">
+      {% block content %}
+      {% endblock %}
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <p>© 2024 TextWave. All Rights Reserved.</p>
+        <p>
+          <a href="#" class="text-secondary me-2">Privacy Policy</a>
+          <a href="#" class="text-secondary">Terms of Service</a>
+        </p>
+        <p>
+          <a href="#" class="me-2"><img src="{% static 'images/facebook-icon.png' %}" alt="Facebook" height="36" /></a>
+          <a href="#" class="me-2"><img src="{% static 'images/twitter-icon.png' %}" alt="Twitter" height="36" /></a>
+          <a href="#" class="me-2"><img src="{% static 'images/instagram-icon.png' %}" alt="Instagram" height="36" /></a>
+        </p>
+      </div>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-picker-element@3.0.0/dist/emoji-picker-element.js"></script>
+  {% bootstrap_javascript %}
+</body>
+</html>

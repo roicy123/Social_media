@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 class="my-4">Feed</h2>
+  <div class="row">
+    <div class="col-md-8">
+      {% if posts %}
+        {% for post in posts %}
+          <div class="card mb-4 shadow-sm feed-card">
+            <div class="card-header">
+              <h5 class="card-title mb-0">Posted by: {{ post.user.username }} on {{ post.created_at }}</h5>
+            </div>
+            <div class="card-body">
+              <p class="card-text">{{ post.content }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <a href="{% url 'like' post.pk %}" class="btn btn-secondary btn-sm feed-btn">
+                    <i class="bi bi-hand-thumbs-up"></i> Like {{ post.likes.count }}
+                  </a>
+                  <a href="{% url 'comment_create' post.pk %}" class="btn btn-primary btn-sm feed-btn">
+                    <i class="bi bi-chat-left-text"></i> Add Comment
+                  </a>
+                </div>
+                {% if post.user == request.user %}
+                  <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger btn-sm feed-btn">
+                    <i class="bi bi-trash"></i> Delete
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+            {% if post.comments.exists %}
+              <div class="card-footer">
+                <h5 class="mb-3">Comments</h5>
+                {% for comment in post.comments.all %}
+                  <div class="card mb-2 comment-card">
+                    <div class="card-header">
+                      <h6 class="card-title mb-0">Posted by: {{ comment.user.username }} on {{ comment.created_at }}</h6>
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text">{{ comment.content }}</p>
+                      {% if comment.user == request.user %}
+                        <a href="{% url 'comment_delete' comment.pk %}" class="btn btn-danger btn-sm feed-btn">
+                          <i class="bi bi-trash"></i> Delete
+                        </a>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="alert alert-info" role="alert">
+          No posts available. Follow more users to see their posts here!
+        </div>
+      {% endif %}
+    </div>
+    <div class="col-md-4">
+      <h4 class="my-4 text-center">User Suggestions</h4>
+      <div class="list-group list-group-flush" id="user-suggestions">
+        {% for user in user_suggestions %}
+          <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <a href="{% url 'user_profile' user.username %}" class="text-decoration-none">{{ user.username }}</a>
+            </div>
+            <a href="{% url 'follow' user.username %}" class="btn btn-primary btn-sm">Follow</a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_css %}
+  <style>
+    .feed-card {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      transition: transform 0.2s ease;
+    }
+
+    .feed-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .feed-btn {
+      transition: background-color 0.3s ease;
+    }
+
+    .feed-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .comment-card {
+      border: 1px solid #eee;
+      border-left: 3px solid #007bff;
+      border-radius: 5px;
+    }
+
+    .list-group-item {
+      transition: background-color 0.3s ease;
+    }
+
+    .list-group-item:hover {
+      background-color: #f8f9fa;
+    }
+
+    .rounded-circle {
+      border: 2px solid #ddd;
+    }
+  </style>
+{% endblock %}

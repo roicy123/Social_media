@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">No Recommendations Found</h2>
+  <p class="text-center">Sorry, we couldn't find any recommendations for "{{ prompt }}".</p>
+  <p class="text-center"><a href="{% url 'recommend_prompt' %}" class="btn btn-primary">Try Again</a></p>
+</div>
+{% endblock %}
